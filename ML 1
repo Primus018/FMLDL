@@ -1,4 +1,4 @@
-# UNIQUE TO PRACTICAL 1
+PRACTICAL 1
 from sklearn.linear_model import LogisticRegression
 
 # Load data (note: fashion-mnist_test.csv has 785 columns: label + 784 pixels)
