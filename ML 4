@@ -1,4 +1,4 @@
-# UNIQUE TO PRACTICAL 4
+PRACTICAL 4
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
