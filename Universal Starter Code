@@ -1,0 +1,27 @@
+# ==================== UNIVERSAL STARTER CODE ====================
+# Works for: Practicals 1, 2, 3, 4, 5, 6, 7, 8
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Set random seeds for reproducibility
+np.random.seed(42)
+
+# Plot styling
+plt.rcParams['figure.figsize'] = (10, 6)
+sns.set_style('whitegrid')
+
+print("✅ All libraries imported successfully!")
+print(f"NumPy version: {np.__version__}")
+print(f"Pandas version: {pd.__version__}")
+print(f"Seaborn version: {sns.__version__}")
+# ================================================================
