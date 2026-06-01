@@ -1,0 +1,123 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
+# 1. Load and prepare data
+data = pd.read_csv("iris.csv")
+X = data.iloc[:, :-1].values  # Features (sepal/petal measurements)
+y = data.iloc[:, -1].values   # Target (species)
+
+# 2. Encode species names to numbers (setosa=0, versicolor=1, virginica=2)
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+# 3. Scale features (important for SVM & Logistic Regression)
+X_scaled = StandardScaler().fit_transform(X)
+
+# 4. Split data (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# 5. Train 4 different models
+models = {
+    'Decision Tree': DecisionTreeClassifier(max_depth=4),
+    'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42),
+    'Logistic Regression': LogisticRegression(max_iter=1000),
+    'SVM': SVC(kernel='rbf')
+}
+
+# 6. Train and evaluate each model
+print("=" * 50)
+print("MODEL PERFORMANCE COMPARISON")
+print("=" * 50)
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    
+    print(f"\n{name}")
+    print(f"Accuracy: {acc:.4f}")
+    print("-" * 30)
+
+# 7. Visualize the Decision Tree (Experiment 5 specific)
+plt.figure(figsize=(12, 8))
+plot_tree(
+    models['Decision Tree'], 
+    filled=True, 
+    feature_names=data.columns[:-1], 
+    class_names=le.classes_,
+    rounded=True
+)
+plt.title("Decision Tree Visualization - Iris Classification")
+plt.show()# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
+# 1. Load and prepare data
+data = pd.read_csv("iris.csv")
+X = data.iloc[:, :-1].values  # Features (sepal/petal measurements)
+y = data.iloc[:, -1].values   # Target (species)
+
+# 2. Encode species names to numbers (setosa=0, versicolor=1, virginica=2)
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+# 3. Scale features (important for SVM & Logistic Regression)
+X_scaled = StandardScaler().fit_transform(X)
+
+# 4. Split data (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# 5. Train 4 different models
+models = {
+    'Decision Tree': DecisionTreeClassifier(max_depth=4),
+    'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42),
+    'Logistic Regression': LogisticRegression(max_iter=1000),
+    'SVM': SVC(kernel='rbf')
+}
+
+# 6. Train and evaluate each model
+print("=" * 50)
+print("MODEL PERFORMANCE COMPARISON")
+print("=" * 50)
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    
+    print(f"\n{name}")
+    print(f"Accuracy: {acc:.4f}")
+    print("-" * 30)
+
+# 7. Visualize the Decision Tree (Experiment 5 specific)
+plt.figure(figsize=(12, 8))
+plot_tree(
+    models['Decision Tree'], 
+    filled=True, 
+    feature_names=data.columns[:-1], 
+    class_names=le.classes_,
+    rounded=True
+)
+plt.title("Decision Tree Visualization - Iris Classification")
+plt.show()
