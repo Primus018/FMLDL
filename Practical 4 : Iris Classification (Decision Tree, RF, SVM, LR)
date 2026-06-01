@@ -1,0 +1,39 @@
+# UNIQUE TO PRACTICAL 4
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
+# Load Iris
+data = pd.read_csv("iris.csv")
+X = data.iloc[:, :-1].values
+y = data.iloc[:, -1].values
+
+# Encode labels
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+# Scale
+X_scaled = StandardScaler().fit_transform(X)
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42, stratify=y)
+
+# Train multiple models
+models = {
+    'Decision Tree': DecisionTreeClassifier(max_depth=4),
+    'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42),
+    'Logistic Regression': LogisticRegression(max_iter=1000),
+    'SVM': SVC(kernel='rbf')
+}
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print(f"\n{name} Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+    print(classification_report(y_test, y_pred))
+
+# Visualise Decision Tree 
+plt.figure(figsize=(12,8))
+plot_tree(models['Decision Tree'], filled=True, feature_names=data.columns[:-1], class_names=le.classes_)
+plt.show()
