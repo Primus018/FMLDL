@@ -1,0 +1,39 @@
+# UNIQUE TO PRACTICAL 7
+import tensorflow as tf
+from tensorflow.keras import layers, models
+from tensorflow.keras.utils import to_categorical
+
+# Load CIFAR-10
+(X_train, y_train), (X_test, y_test) = tf.keras.datasets.cifar10.load_data()
+
+# Normalise pixels
+X_train = X_train.astype('float32') / 255.0
+X_test = X_test.astype('float32') / 255.0
+
+# One-hot encode labels
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# Build CNN
+def build_cnn():
+    model = models.Sequential([
+        layers.Conv2D(32, (3,3), activation='relu', padding='same', input_shape=(32,32,3)),
+        layers.MaxPooling2D(2,2),
+        layers.Conv2D(64, (3,3), activation='relu', padding='same'),
+        layers.MaxPooling2D(2,2),
+        layers.Flatten(),
+        layers.Dense(128, activation='relu'),
+        layers.Dropout(0.5),
+        layers.Dense(10, activation='softmax')
+    ])
+    return model
+
+model = build_cnn()
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train
+history = model.fit(X_train, y_train, validation_split=0.15, epochs=20, batch_size=64)
+
+# Evaluate
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print(f"Test Accuracy: {test_acc:.4f}")
