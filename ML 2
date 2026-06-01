@@ -1,4 +1,4 @@
-# UNIQUE TO PRACTICAL 2
+ PRACTICAL 2
 from sklearn.datasets import fetch_lfw_people
 from sklearn.svm import SVC
 
