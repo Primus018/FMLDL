@@ -1,0 +1,71 @@
+# Install (only needed once)
+!pip install -q hmmlearn
+
+import numpy as np
+from hmmlearn import hmm
+
+# ============ STEP 1: DNA to Numbers ============
+# Map: A=0, T=1, G=2, C=3
+nuc_to_num = {'A':0, 'T':1, 'G':2, 'C':3}
+
+def dna_to_numbers(sequence):
+    """Convert DNA string to number list"""
+    return np.array([nuc_to_num[base] for base in sequence]).reshape(-1, 1)
+
+# ============ STEP 2: Train HMM ============
+def train_hmm(sequences, n_states=2):
+    """Train HMM on list of DNA sequences"""
+    # Convert all sequences to numbers and combine
+    X = np.concatenate([dna_to_numbers(seq) for seq in sequences])
+    lengths = [len(seq) for seq in sequences]  # Track where each sequence ends
+    
+    # Create and train HMM
+    model = hmm.CategoricalHMM(n_components=n_states, n_iter=100, random_state=42)
+    model.fit(X, lengths)
+    return model
+
+# ============ STEP 3: Classify ============
+def classify(sequence, model_class0, model_class1):
+    """Classify sequence as Class 0 or Class 1"""
+    obs = dna_to_numbers(sequence)
+    
+    # Higher score = better fit
+    score0 = model_class0.score(obs)
+    score1 = model_class1.score(obs)
+    
+    return 0 if score0 > score1 else 1
+
+# ============ EXAMPLE: GC-rich vs AT-rich DNA ============
+
+# Training data
+gc_rich = ["GGGCCCAAA", "CCGGGTTT"]  # Class 0
+at_rich = ["AAATTTCCC", "TTTAAAGGG"]  # Class 1
+
+# Train models
+model_gc = train_hmm(gc_rich)
+model_at = train_hmm(at_rich)
+
+# Test sequence
+test = "GGGCATTTAA"
+result = classify(test, model_gc, model_at)
+
+print(f"Test sequence: {test}")
+print(f"Classified as: {'GC-rich' if result == 0 else 'AT-rich'}")
+
+# Optional: See confidence scores
+obs = dna_to_numbers(test)
+print(f"GC-rich model score: {model_gc.score(obs):.2f}")
+print(f"AT-rich model score: {model_at.score(obs):.2f}")
+
+# Store the scores in variables
+gc_score = model_gc.score(obs)
+at_score = model_at.score(obs)
+
+print(f"GC-rich model score: {gc_score:.2f}")
+print(f"AT-rich model score: {at_score:.2f}")
+
+# Use the scores in the bar plot
+plt.bar(['GC-rich', 'AT-rich'], [gc_score, at_score], color=['green', 'red'])
+plt.title(f'Prediction: {"GC-rich" if gc_score > at_score else "AT-rich"}')
+plt.ylabel('Log Likelihood Score')
+plt.show()
